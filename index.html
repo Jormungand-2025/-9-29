@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 图形与 Hover 效果</title>
+    <style>
+        /* 保留课堂案例的基础布局。 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #171923;
+            font-family: Arial, sans-serif;
+        }
+
+        .stage {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(24px, 3.7vw, 56px);
+            width: 100%;
+            max-width: 1500px;
+            padding: 56px 32px;
+        }
+
+        /* 所有图形共用尺寸、阴影和过渡，单独的类负责形状与配色。 */
+        .cube {
+            --shape-size: clamp(100px, 11.35vw, 170px);
+            position: relative;
+            flex-shrink: 0;
+            width: var(--shape-size);
+            height: var(--shape-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 24px var(--shadow-color);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* 上移后保留原来底部的鼠标命中区域，避免边缘悬停时反复跳动。 */
+        .cube::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+        }
+
+        .cube:hover::before {
+            bottom: -10px;
+        }
+
+        /* 文字通过伪元素生成，默认隐藏，不需要 JavaScript。 */
+        .cube::after {
+            content: "hover";
+            color: #fff;
+            font-size: clamp(22px, 2.2vw, 32px);
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        /* 悬停时上移 10px，阴影的水平、垂直偏移都变成 0。 */
+        .cube:hover,
+        .cube:focus-visible {
+            transform: translateY(-10px);
+            box-shadow: 0 0 24px var(--shadow-color);
+        }
+
+        .cube:hover::after,
+        .cube:focus-visible::after {
+            opacity: 1;
+        }
+
+        /* 从左到右，对应参考图的六个图形。 */
+        .c1 {
+            --shadow-color: rgba(255, 94, 98, 0.35);
+            border-radius: 0;
+            background: linear-gradient(135deg, #ff9a56, #ff5e62);
+        }
+
+        .c2 {
+            --shadow-color: rgba(46, 204, 150, 0.30);
+            border-radius: 10%;
+            background: linear-gradient(45deg, #39ce87, #29cfbd);
+        }
+
+        .c3 {
+            --shadow-color: rgba(139, 110, 162, 0.30);
+            border-radius: 24%;
+            background: linear-gradient(180deg, #ad87a5, #766496);
+        }
+
+        .c4 {
+            --shadow-color: rgba(255, 173, 117, 0.30);
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffdc6b, #ff9d86);
+        }
+
+        .c5 {
+            --shadow-color: rgba(74, 116, 112, 0.25);
+            border-radius: 6%;
+            background: linear-gradient(135deg, #497c64, #4b6d83);
+        }
+
+        .c6 {
+            --shadow-color: rgba(153, 119, 169, 0.30);
+            border-radius: 50%;
+            background: radial-gradient(circle at 60% 40%, #b995bd, #80668f);
+        }
+
+        /* Tab 键也可以查看效果，焦点轮廓仅在键盘操作时出现。 */
+        .cube:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 6px;
+        }
+
+        @media (max-width: 480px) {
+            .stage {
+                gap: 28px;
+                padding: 40px 24px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cube,
+            .cube::after {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="stage" aria-label="六种 CSS 图形，鼠标悬停或使用 Tab 键查看效果">
+        <div class="cube c1" tabindex="0" aria-label="橙红渐变正方形"></div>
+        <div class="cube c2" tabindex="0" aria-label="绿色渐变圆角正方形"></div>
+        <div class="cube c3" tabindex="0" aria-label="紫色渐变圆角正方形"></div>
+        <div class="cube c4" tabindex="0" aria-label="橙黄渐变圆形"></div>
+        <div class="cube c5" tabindex="0" aria-label="蓝绿渐变圆角正方形"></div>
+        <div class="cube c6" tabindex="0" aria-label="紫色径向渐变圆形"></div>
+    </main>
+</body>
+</html>
